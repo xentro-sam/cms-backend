@@ -5,8 +5,8 @@ const cmsRoutes = express.Router();
 
 cmsRoutes.route('/contentTypes')
     .get(cmsController.getContentTypes)
-    .post(cmsController.createContentType)
-    .delete(cmsController.deleteContentType);
+    .post(cmsController.createContentType);
+// .delete(cmsController.deleteContentType);
 
 cmsRoutes.route('/contentTypes/:id')
     .get(cmsController.getContentType)

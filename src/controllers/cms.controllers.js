@@ -75,7 +75,8 @@ const updateContentType = async (req, res) => {
 const deleteContentTypeEntry = async (req, res) => {
   try {
     const {id} = req.params;
-    const contentType = await cmsService.deleteContentTypeEntry(id);
+    const {entryId} = req.body;
+    const contentType = await cmsService.deleteContentTypeEntry(id, entryId);
     res.status(200).json(contentType);
   } catch (error) {
     if (error instanceof CustomError) {

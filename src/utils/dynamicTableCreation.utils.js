@@ -15,7 +15,6 @@ const dynamicTableCreator = (tableName, fields) => {
     },
     ...tableFields,
   };
-  console.log('tableAttributes', tableAttributes);
   db.sequelize.define(tableName, tableAttributes, {
     freezeTableName: true,
   });
