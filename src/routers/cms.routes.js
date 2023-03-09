@@ -17,4 +17,7 @@ cmsRoutes.route('/contentTypes/:id/:entryId')
     .delete(cmsController.deleteContentTypeEntry)
     .put(cmsController.updateContentTypeEntry);
 
+cmsRoutes.route('/contentTypes/:id/fields')
+    .get(cmsController.getContentTypeFields);
+
 module.exports = cmsRoutes;

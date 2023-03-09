@@ -115,6 +115,20 @@ const deleteContentType = async (req, res) => {
   }
 };
 
+const getContentTypeFields = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const contentTypeFields = await cmsService.getContentTypeFields(id);
+    res.status(200).json(contentTypeFields);
+  } catch (error) {
+    if (error instanceof CustomError) {
+      res.status(error.statusCode).json({error: error.message});
+    } else {
+      res.status(500).json({error: error.message});
+    }
+  }
+};
+
 
 module.exports = {
   getContentTypes,
@@ -125,4 +139,5 @@ module.exports = {
   createContentTypeEntry,
   updateContentTypeEntry,
   deleteContentType,
+  getContentTypeFields,
 };

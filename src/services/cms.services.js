@@ -148,6 +148,20 @@ const deleteContentType = async (id) => {
   return {message: 'ContentType deleted successfully'};
 };
 
+const getContentTypeFields = async (id) => {
+  const contentTypeTable = await db.TablesList.findOne({
+    where: {
+      ContentTypeId: id,
+    },
+  });
+  const dynamicTable = db.sequelize.model(contentTypeTable.tableName);
+  let tableAttributes = dynamicTable.rawAttributes;
+  tableAttributes = Object.keys(tableAttributes);
+  tableAttributes = tableAttributes.filter((attribute) => attribute !== 'id' && attribute !== 'createdAt' && attribute !== 'updatedAt');
+  return tableAttributes;
+};
+
+
 module.exports = {
   getContentTypes,
   createContentType,
@@ -157,4 +171,5 @@ module.exports = {
   updateContentTypeEntry,
   updateContentType,
   deleteContentType,
+  getContentTypeFields,
 };
