@@ -101,6 +101,20 @@ const updateContentTypeEntry = async (req, res) => {
   }
 };
 
+const deleteContentType = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const contentType = await cmsService.deleteContentType(id);
+    res.status(200).json(contentType);
+  } catch (error) {
+    if (error instanceof CustomError) {
+      res.status(error.statusCode).json({error: error.message});
+    } else {
+      res.status(500).json({error: error.message});
+    }
+  }
+};
+
 
 module.exports = {
   getContentTypes,
@@ -110,4 +124,5 @@ module.exports = {
   deleteContentTypeEntry,
   createContentTypeEntry,
   updateContentTypeEntry,
+  deleteContentType,
 };

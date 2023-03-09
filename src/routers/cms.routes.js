@@ -10,8 +10,8 @@ cmsRoutes.route('/contentTypes')
 cmsRoutes.route('/contentTypes/:id')
     .get(cmsController.getContentType)
     .post(cmsController.createContentTypeEntry)
-    .put(cmsController.updateContentType);
-// .delete(cmsController.deleteContentType);
+    .put(cmsController.updateContentType)
+    .delete(cmsController.deleteContentType);
 
 cmsRoutes.route('/contentTypes/:id/:entryId')
     .delete(cmsController.deleteContentTypeEntry)
