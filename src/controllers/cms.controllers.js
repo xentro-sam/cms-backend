@@ -42,6 +42,21 @@ const getContentType = async (req, res) => {
   }
 };
 
+const createContentTypeEntry = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const entry = req.body;
+    const contentTypeEntry = await cmsService.createContentTypeEntry(id, entry);
+    res.status(201).json(contentTypeEntry);
+  } catch (error) {
+    if (error instanceof CustomError) {
+      res.status(error.statusCode).json({error: error.message});
+    } else {
+      res.status(500).json({error: error.message});
+    }
+  }
+};
+
 const updateContentType = async (req, res) => {
   try {
     const {id} = req.params;
@@ -57,10 +72,10 @@ const updateContentType = async (req, res) => {
   }
 };
 
-const deleteContentType = async (req, res) => {
+const deleteContentTypeEntry = async (req, res) => {
   try {
     const {id} = req.params;
-    const contentType = await cmsService.deleteContentType(id);
+    const contentType = await cmsService.deleteContentTypeEntry(id);
     res.status(200).json(contentType);
   } catch (error) {
     if (error instanceof CustomError) {
@@ -77,5 +92,6 @@ module.exports = {
   createContentType,
   getContentType,
   updateContentType,
-  deleteContentType,
+  deleteContentTypeEntry,
+  createContentTypeEntry,
 };

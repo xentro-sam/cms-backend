@@ -5,11 +5,13 @@ const cmsRoutes = express.Router();
 
 cmsRoutes.route('/contentTypes')
     .get(cmsController.getContentTypes)
-    .post(cmsController.createContentType);
+    .post(cmsController.createContentType)
+    .delete(cmsController.deleteContentType);
 
 cmsRoutes.route('/contentTypes/:id')
     .get(cmsController.getContentType)
+    .post(cmsController.createContentTypeEntry)
     .put(cmsController.updateContentType)
-    .delete(cmsController.deleteContentType);
+    .delete(cmsController.deleteContentTypeEntry);
 
 module.exports = cmsRoutes;

@@ -30,7 +30,32 @@ const createContentType = async (contentTypeName, contentTypeFields) => {
   return contentType;
 };
 
+const getContentTypeEntries = async (id) => {
+  const contentTypeTable = await db.TablesList.findOne({
+    where: {
+      ContentTypeId: id,
+    },
+  });
+  const dynamicTable = db.sequelize.model(contentTypeTable.tableName);
+  const contentTypeEntries = await dynamicTable.findAll();
+  return contentTypeEntries;
+};
+
+const createContentTypeEntry = async (id, entry) => {
+  const contentTypeTable = await db.TablesList.findOne({
+    where: {
+      ContentTypeId: id,
+    },
+  });
+  console.log(entry);
+  const dynamicTable = db.sequelize.model(contentTypeTable.tableName);
+  const contentTypeEntry = await dynamicTable.create(entry);
+  return contentTypeEntry;
+};
+
 module.exports = {
   getContentTypes,
   createContentType,
+  getContentTypeEntries,
+  createContentTypeEntry,
 };
