@@ -2,7 +2,8 @@
     "env": {
         "commonjs": true,
         "es2021": true,
-        "node": true
+        "node": true,
+        "jest": true
     },
     "extends": "google",
     "overrides": [
@@ -11,5 +12,9 @@
         "ecmaVersion": "latest"
     },
     "rules": {
+        "new-cap": "off",
+        "require-jsdoc": "off",
+        "max-len": "off",
+        "valid-jsdoc": "off"
     }
 }
