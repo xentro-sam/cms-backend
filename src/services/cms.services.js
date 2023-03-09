@@ -1,5 +1,5 @@
 const db = require('../../db/models');
-// const CustomError = require('../utils/customError.utils');
+const CustomError = require('../utils/customError.utils');
 
 const getContentTypes = async () => {
   const contentTypes = await db.ContentTypes.findAll();
@@ -7,6 +7,14 @@ const getContentTypes = async () => {
 };
 
 const createContentType = async (contentTypeName, contentTypeFields) => {
+  const contentTypeExists = await db.ContentTypes.findOne({
+    where: {
+      contentTypeName,
+    },
+  });
+  if (contentTypeExists) {
+    throw new CustomError(400, 'ContentType already exists');
+  }
   const contentType = await db.ContentTypes.create({
     contentTypeName,
   });

@@ -7,7 +7,7 @@ const getContentTypes = async (req, res) => {
     res.status(200).json(contentTypes);
   } catch (error) {
     if (error instanceof CustomError) {
-      res.status(error.statusCode).json(error.message);
+      res.status(error.statusCode).json({error: error.message});
     } else {
       res.status(500).json({error: error.message});
     }
@@ -21,7 +21,7 @@ const createContentType = async (req, res) => {
     res.status(201).json(contentType);
   } catch (error) {
     if (error instanceof CustomError) {
-      res.status(error.statusCode).json(error.message);
+      res.status(error.statusCode).json({error: error.message});
     } else {
       res.status(500).json({error: error.message});
     }
@@ -35,7 +35,7 @@ const getContentType = async (req, res) => {
     res.status(200).json(contentTypeEntries);
   } catch (error) {
     if (error instanceof CustomError) {
-      res.status(error.statusCode).json(error.message);
+      res.status(error.statusCode).json({error: error.message});
     } else {
       res.status(500).json({error: error.message});
     }
@@ -50,7 +50,7 @@ const updateContentType = async (req, res) => {
     res.status(200).json(contentType);
   } catch (error) {
     if (error instanceof CustomError) {
-      res.status(error.statusCode).json(error.message);
+      res.status(error.statusCode).json({error: error.message});
     } else {
       res.status(500).json({error: error.message});
     }
@@ -64,7 +64,7 @@ const deleteContentType = async (req, res) => {
     res.status(200).json(contentType);
   } catch (error) {
     if (error instanceof CustomError) {
-      res.status(error.statusCode).json(error.message);
+      res.status(error.statusCode).json({error: error.message});
     } else {
       res.status(500).json({error: error.message});
     }
