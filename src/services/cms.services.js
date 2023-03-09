@@ -1,5 +1,6 @@
 const db = require('../../db/models');
 const CustomError = require('../utils/customError.utils');
+const {dynamicTableCreator} = require('../utils/dynamicTableCreation.utils');
 
 const getContentTypes = async () => {
   const contentTypes = await db.ContentTypes.findAll();
@@ -22,20 +23,10 @@ const createContentType = async (contentTypeName, contentTypeFields) => {
     tableName: `Table_${contentType.id}`,
     ContentTypeId: contentType.id,
   });
-  console.log(contentTypeTable);
-  //   const contentTypeFieldsArray = contentTypeFields.split(',');
-  //   const contentTypeFieldsArrayTrimmed = contentTypeFieldsArray.map((field) => field.trim());
-  //   const contentTypeFieldsArrayTrimmedLowerCase = contentTypeFieldsArrayTrimmed.map((field) => field.toLowerCase());
-  //   const contentTypeFieldsArrayTrimmedLowerCaseUnique = [...new Set(contentTypeFieldsArrayTrimmedLowerCase)];
-  //   const contentTypeFieldsArrayTrimmedLowerCaseUniqueFormatted = contentTypeFieldsArrayTrimmedLowerCaseUnique.map((field) => {
-  //     return {
-  //       contentTypeField: field,
-  //       contentTypeId: contentType.id,
-  //     };
-  //   });
-  //   const contentTypeFieldsCreated = await db.ContentTypeFields.bulkCreate(contentTypeFieldsArrayTrimmedLowerCaseUniqueFormatted);
-  //   return contentTypeFieldsCreated;
-  // console.log(contentTypeFields);
+  const contentTypeFieldsArrayTrimmed = contentTypeFields.map((field) => field.trim());
+  const contentTypeFieldsArrayTrimmedLowerCase = contentTypeFieldsArrayTrimmed.map((field) => field.toLowerCase());
+  const contentTypeFieldsArrayTrimmedLowerCaseUnique = [...new Set(contentTypeFieldsArrayTrimmedLowerCase)];
+  dynamicTableCreator(contentTypeTable.tableName, contentTypeFieldsArrayTrimmedLowerCaseUnique);
   return contentType;
 };
 
