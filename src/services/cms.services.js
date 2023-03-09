@@ -85,6 +85,50 @@ const updateContentTypeEntry = async (id, entryId, entry) => {
   return {message: 'Entry updated successfully'};
 };
 
+const updateContentType = async (id, contentTypeName, contentTypeFields, operation) => {
+  const contentType = await db.ContentTypes.findOne({
+    where: {
+      id,
+    },
+  });
+  if (!contentType) throw new CustomError(404, 'ContentType not found');
+  if (contentTypeName) {
+    contentType.contentTypeName = contentTypeName;
+  }
+  if (contentTypeFields) {
+    const contentTypeTable = await db.TablesList.findOne({
+      where: {
+        ContentTypeId: id,
+      },
+    });
+    const dynamicTable = db.sequelize.model(contentTypeTable.tableName);
+    const contentTypeFieldsArrayTrimmed = contentTypeFields.map((field) => field.trim());
+    const contentTypeFieldsArrayTrimmedLowerCase = contentTypeFieldsArrayTrimmed.map((field) => field.toLowerCase());
+    const contentTypeFieldsArrayTrimmedLowerCaseUnique = [...new Set(contentTypeFieldsArrayTrimmedLowerCase)];
+    if (operation === 'add') {
+      let tableAttributes = dynamicTable.rawAttributes;
+      tableAttributes = Object.keys(tableAttributes);
+      tableAttributes = tableAttributes.filter((attribute) => attribute !== 'id');
+      tableAttributes = [...tableAttributes, ...contentTypeFieldsArrayTrimmedLowerCaseUnique];
+      dynamicTableCreator(contentTypeTable.tableName, tableAttributes);
+      await db.sequelize.sync({alter: true});
+    } else if (operation === 'remove') {
+      let tableAttributes = dynamicTable.rawAttributes;
+      tableAttributes = Object.keys(tableAttributes);
+      if (tableAttributes.length === 1) throw new CustomError(400, 'Cannot remove all fields from a ContentType');
+      contentTypeFieldsArrayTrimmedLowerCaseUnique.forEach((field) => {
+        if (!tableAttributes.includes(field)) throw new CustomError(400, `Field ${field} does not exist`);
+      });
+      tableAttributes = tableAttributes.filter((attribute) => attribute !== 'id');
+      tableAttributes = tableAttributes.filter((attribute) => !contentTypeFieldsArrayTrimmedLowerCaseUnique.includes(attribute));
+      dynamicTableCreator(contentTypeTable.tableName, tableAttributes);
+      await db.sequelize.sync({alter: true});
+    }
+  }
+  await contentType.save();
+  return {message: 'ContentType updated successfully'};
+};
+
 
 module.exports = {
   getContentTypes,
@@ -93,4 +137,5 @@ module.exports = {
   createContentTypeEntry,
   deleteContentTypeEntry,
   updateContentTypeEntry,
+  updateContentType,
 };
