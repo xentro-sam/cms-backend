@@ -68,6 +68,23 @@ const deleteContentTypeEntry = async (id, entryId) => {
   return {message: 'Entry deleted successfully'};
 };
 
+const updateContentTypeEntry = async (id, entryId, entry) => {
+  const contentTypeTable = await db.TablesList.findOne({
+    where: {
+      ContentTypeId: id,
+    },
+  });
+  const dynamicTable = db.sequelize.model(contentTypeTable.tableName);
+  const contentTypeEntry = await dynamicTable.update(entry, {
+    where: {
+      id: entryId,
+    },
+  });
+  console.log(contentTypeEntry, 'contentTypeEntry');
+  if (!contentTypeEntry[0]) throw new CustomError(404, 'Entry not found');
+  return {message: 'Entry updated successfully'};
+};
+
 
 module.exports = {
   getContentTypes,
@@ -75,4 +92,5 @@ module.exports = {
   getContentTypeEntries,
   createContentTypeEntry,
   deleteContentTypeEntry,
+  updateContentTypeEntry,
 };
