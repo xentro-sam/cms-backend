@@ -18,6 +18,11 @@ const createContentType = async (contentTypeName, contentTypeFields) => {
   const contentType = await db.ContentTypes.create({
     contentTypeName,
   });
+  const contentTypeTable = await db.TablesList.create({
+    tableName: `Table_${contentType.id}`,
+    ContentTypeId: contentType.id,
+  });
+  console.log(contentTypeTable);
   //   const contentTypeFieldsArray = contentTypeFields.split(',');
   //   const contentTypeFieldsArrayTrimmed = contentTypeFieldsArray.map((field) => field.trim());
   //   const contentTypeFieldsArrayTrimmedLowerCase = contentTypeFieldsArrayTrimmed.map((field) => field.toLowerCase());
