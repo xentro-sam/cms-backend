@@ -20,6 +20,6 @@ cmsRoutes.route('/contentTypes/:id/:entryId')
 
 cmsRoutes.route('/contentTypes/:id/fields')
     .get(validateId, cmsController.getContentTypeFields)
-    .post(validateId, cmsController.changeContentTypeFieldNames);
+    .put(validateId, cmsController.changeContentTypeFieldNames);
 
 module.exports = cmsRoutes;
