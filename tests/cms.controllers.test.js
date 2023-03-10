@@ -514,4 +514,66 @@ describe('cms controllers', () => {
       expect(res.json).toHaveBeenCalledWith({error: 'test'});
     });
   });
+  describe('changeContentTypeFieldNames', () => {
+    it('should return 200 and change content type field names', async () => {
+      const spy = jest.spyOn(cmsServices, 'changeContentTypeFieldNames');
+      spy.mockResolvedValueOnce({message: 'Field name changed successfully'});
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          oldName: 'name',
+          newName: 'email',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.changeContentTypeFieldNames(req, res);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({message: 'Field name changed successfully'});
+    });
+    it('should return 500 and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'changeContentTypeFieldNames');
+      spy.mockRejectedValueOnce(new Error('test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          oldName: 'name',
+          newName: 'email',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.changeContentTypeFieldNames(req, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+    it('should return custom error status code and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'changeContentTypeFieldNames');
+      spy.mockRejectedValueOnce(new CustomError(400, 'test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          oldName: 'name',
+          newName: 'email',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.changeContentTypeFieldNames(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+  });
 });
