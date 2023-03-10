@@ -1,6 +1,6 @@
 const db = require('../../db/models');
 const CustomError = require('../utils/customError.utils');
-const {dynamicTableCreator} = require('../utils/dynamicTableCreation.utils');
+const tableCreation = require('../utils/dynamicTableCreation.utils');
 
 const getContentTypes = async () => {
   const contentTypes = await db.ContentTypes.findAll();
@@ -26,7 +26,7 @@ const createContentType = async (contentTypeName, contentTypeFields) => {
   const contentTypeFieldsArrayTrimmed = contentTypeFields.map((field) => field.trim());
   const contentTypeFieldsArrayTrimmedLowerCase = contentTypeFieldsArrayTrimmed.map((field) => field.toLowerCase());
   const contentTypeFieldsArrayTrimmedLowerCaseUnique = [...new Set(contentTypeFieldsArrayTrimmedLowerCase)];
-  dynamicTableCreator(contentTypeTable.tableName, contentTypeFieldsArrayTrimmedLowerCaseUnique);
+  tableCreation.dynamicTableCreator(contentTypeTable.tableName, contentTypeFieldsArrayTrimmedLowerCaseUnique);
   return contentType;
 };
 
@@ -110,7 +110,7 @@ const updateContentType = async (id, contentTypeName, contentTypeFields, operati
       tableAttributes = Object.keys(tableAttributes);
       tableAttributes = tableAttributes.filter((attribute) => attribute !== 'id');
       tableAttributes = [...tableAttributes, ...contentTypeFieldsArrayTrimmedLowerCaseUnique];
-      dynamicTableCreator(contentTypeTable.tableName, tableAttributes);
+      tableCreation.dynamicTableCreator(contentTypeTable.tableName, tableAttributes);
       await db.sequelize.sync({alter: true});
     } else if (operation === 'remove') {
       let tableAttributes = dynamicTable.rawAttributes;
@@ -121,7 +121,7 @@ const updateContentType = async (id, contentTypeName, contentTypeFields, operati
       });
       tableAttributes = tableAttributes.filter((attribute) => attribute !== 'id');
       tableAttributes = tableAttributes.filter((attribute) => !contentTypeFieldsArrayTrimmedLowerCaseUnique.includes(attribute));
-      dynamicTableCreator(contentTypeTable.tableName, tableAttributes);
+      tableCreation.dynamicTableCreator(contentTypeTable.tableName, tableAttributes);
       await db.sequelize.sync({alter: true});
     }
   }
