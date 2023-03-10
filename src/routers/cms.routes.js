@@ -1,5 +1,6 @@
 const express = require('express');
 const cmsController = require('../controllers/cms.controllers');
+const {validateId} = require('../middlewares/cms.validations');
 
 const cmsRoutes = express.Router();
 
@@ -8,16 +9,16 @@ cmsRoutes.route('/contentTypes')
     .post(cmsController.createContentType);
 
 cmsRoutes.route('/contentTypes/:id')
-    .get(cmsController.getContentType)
-    .post(cmsController.createContentTypeEntry)
-    .put(cmsController.updateContentType)
-    .delete(cmsController.deleteContentType);
+    .get(validateId, cmsController.getContentType)
+    .post(validateId, cmsController.createContentTypeEntry)
+    .put(validateId, cmsController.updateContentType)
+    .delete(validateId, cmsController.deleteContentType);
 
 cmsRoutes.route('/contentTypes/:id/:entryId')
-    .delete(cmsController.deleteContentTypeEntry)
-    .put(cmsController.updateContentTypeEntry);
+    .delete(validateId, cmsController.deleteContentTypeEntry)
+    .put(validateId, cmsController.updateContentTypeEntry);
 
 cmsRoutes.route('/contentTypes/:id/fields')
-    .get(cmsController.getContentTypeFields);
+    .get(validateId, cmsController.getContentTypeFields);
 
 module.exports = cmsRoutes;
