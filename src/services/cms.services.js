@@ -171,13 +171,14 @@ const changeContentTypeFieldNames = async (id, oldFieldName, newFieldName) => {
   if (!tableAttributes[oldFieldName]) throw new CustomError(400, 'Field does not exist');
   if (tableAttributes[newFieldName]) throw new CustomError(400, 'Field already exists');
   db.sequelize.getQueryInterface().renameColumn(contentTypeTable.tableName, oldFieldName, newFieldName);
-  const newTableAttributes = Object.keys(tableAttributes).map((attribute) => {
+  let newTableAttributes = Object.keys(tableAttributes).map((attribute) => {
     if (attribute === 'id' || attribute === 'createdAt' || attribute === 'updatedAt') return;
     if (attribute === oldFieldName) {
       return newFieldName;
     }
     return attribute;
   });
+  newTableAttributes = newTableAttributes.filter((attribute) => attribute);
   tableCreation.dynamicTableCreator(contentTypeTable.tableName, newTableAttributes);
   await db.sequelize.sync({alter: true});
   return {message: 'Field name changed successfully'};

@@ -18,7 +18,7 @@ cmsRoutes.route('/contentTypes/:id/:entryId')
     .delete(validateId, cmsController.deleteContentTypeEntry)
     .put(validateId, cmsController.updateContentTypeEntry);
 
-cmsRoutes.route('/contentTypes/:id/fields')
+cmsRoutes.route('/contentTypes/:id/fields/change')
     .get(validateId, cmsController.getContentTypeFields)
     .put(validateId, cmsController.changeContentTypeFieldNames);
 
