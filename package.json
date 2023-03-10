@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "db:migrate": "sequelize db:migrate",
+    "start": "npm run db:migrate && nodemon index.js"
   },
   "keywords": [],
   "author": "",

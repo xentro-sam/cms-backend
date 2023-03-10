@@ -129,6 +129,21 @@ const getContentTypeFields = async (req, res) => {
   }
 };
 
+const changeContentTypeFieldNames = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const {oldName, newName} = req.body;
+    const contentType = await cmsService.changeContentTypeFieldNames(id, oldName, newName);
+    res.status(200).json(contentType);
+  } catch (error) {
+    if (error instanceof CustomError) {
+      res.status(error.statusCode).json({error: error.message});
+    } else {
+      res.status(500).json({error: error.message});
+    }
+  }
+};
+
 
 module.exports = {
   getContentTypes,
@@ -140,4 +155,5 @@ module.exports = {
   updateContentTypeEntry,
   deleteContentType,
   getContentTypeFields,
+  changeContentTypeFieldNames,
 };
