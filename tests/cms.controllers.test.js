@@ -106,4 +106,132 @@ describe('cms controllers', () => {
       expect(res.json).toHaveBeenCalledWith({error: 'test'});
     });
   });
+  describe('getContentType', () => {
+    it('should return 200 and content type', async () => {
+      const spy = jest.spyOn(cmsServices, 'getContentTypeEntries');
+      spy.mockResolvedValueOnce({
+        id: 1,
+        name: 'test',
+        email: 'example@example.com',
+      });
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.getContentType(req, res);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        id: 1,
+        name: 'test',
+        email: 'example@example.com',
+      });
+    });
+    it('should return 500 and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'getContentTypeEntries');
+      spy.mockRejectedValueOnce(new Error('test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.getContentType(req, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+    it('should return custom error status code and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'getContentTypeEntries');
+      spy.mockRejectedValueOnce(new CustomError(400, 'test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.getContentType(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+  });
+  describe('createContentTypeEntry', () => {
+    it('should return 201 and content type entry', async () => {
+      const spy = jest.spyOn(cmsServices, 'createContentTypeEntry');
+      spy.mockResolvedValueOnce({
+        id: 1,
+        name: 'test',
+        email: 'example@example.com',
+      });
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          name: 'test',
+          email: 'example@example.com',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.createContentTypeEntry(req, res);
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith({
+        id: 1,
+        name: 'test',
+        email: 'example@example.com',
+      });
+    });
+    it('should return 500 and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'createContentTypeEntry');
+      spy.mockRejectedValueOnce(new Error('test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          name: 'test',
+          email: 'example@example.com',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.createContentTypeEntry(req, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+    it('should return custom error status code and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'createContentTypeEntry');
+      spy.mockRejectedValueOnce(new CustomError(400, 'test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          name: 'test',
+          email: 'example@example.com',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.createContentTypeEntry(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+  });
 });
