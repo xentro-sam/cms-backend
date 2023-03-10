@@ -17,6 +17,7 @@ const dynamicTableCreator = (tableName, fields) => {
   };
   db.sequelize.define(tableName, tableAttributes, {
     freezeTableName: true,
+    timestamps: false,
   });
   db.sequelize.sync()
       .then(() => {
