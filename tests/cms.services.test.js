@@ -241,5 +241,109 @@ describe('cms services', () => {
       expect(spyDbModel).toHaveBeenCalledTimes(1);
       expect(spyDbTablesListFind).toHaveBeenCalledTimes(1);
     });
+    it('should throw an error if field does not exist', async () => {
+      const mockValue = [{id: 1, test: 'test', test2: 'test2'}];
+      const spyDb = jest.spyOn(db.ContentTypes, 'findOne');
+      spyDb.mockResolvedValue({id: 1, contentTypeName: 'test', save:
+        () => {},
+      });
+      const spyDbModel = jest.spyOn(db.sequelize, 'model');
+      const spyDbTablesListFind = jest.spyOn(db.TablesList, 'findOne');
+      spyDbTablesListFind.mockResolvedValue({tableName: 'Table_1'});
+      spyDbModel.mockImplementation(() => {
+        return {
+          update: () => {
+            return mockValue;
+          },
+          rawAttributes: {
+            test: 'test',
+          },
+        };
+      });
+      await expect(cmsServices.updateContentType(1, null, ['test3'], 'remove')).rejects.toThrow();
+      expect(spyDb).toHaveBeenCalledTimes(1);
+      expect(spyDbModel).toHaveBeenCalledTimes(1);
+      expect(spyDbTablesListFind).toHaveBeenCalledTimes(1);
+    });
+    it('should update content type name', async () => {
+      const mockValue = [{id: 1, test: 'test', test2: 'test2'}];
+      const spyDb = jest.spyOn(db.ContentTypes, 'findOne');
+      spyDb.mockResolvedValue({id: 1, contentTypeName: 'test', save:
+            () => {},
+      });
+      const spyDbModel = jest.spyOn(db.sequelize, 'model');
+      const spyDbTablesListFind = jest.spyOn(db.TablesList, 'findOne');
+      spyDbTablesListFind.mockResolvedValue({tableName: 'Table_1'});
+      spyDbModel.mockImplementation(() => {
+        return {
+          update: () => {
+            return mockValue;
+          },
+          rawAttributes: {
+            test: 'test',
+            test2: 'test2',
+          },
+        };
+      });
+      const spyTableCreation = jest.spyOn(tableCreation, 'dynamicTableCreator');
+      spyTableCreation.mockImplementation(() => {});
+      const spySync = jest.spyOn(db.sequelize, 'sync');
+      spySync.mockImplementation(() => {});
+      const contentType = await cmsServices.updateContentType(1, 'test2', ['test', 'test2'], 'add');
+      expect(contentType).toEqual({message: 'ContentType updated successfully'});
+      expect(spyDb).toHaveBeenCalledTimes(1);
+      expect(spyDbModel).toHaveBeenCalledTimes(1);
+      expect(spyTableCreation).toHaveBeenCalledTimes(1);
+      expect(spyDbTablesListFind).toHaveBeenCalledTimes(1);
+      expect(spySync).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('deleteContentType', () => {
+    it('should delete a content type', async () => {
+      const spyDb = jest.spyOn(db.ContentTypes, 'findOne');
+      spyDb.mockResolvedValue({id: 1, contentTypeName: 'test', destroy:
+        () => {}});
+      const spyDbModel = jest.spyOn(db.sequelize, 'model');
+      const spyDbTablesListFind = jest.spyOn(db.TablesList, 'findOne');
+      spyDbTablesListFind.mockResolvedValue({tableName: 'Table_1', destroy:
+        () => {}});
+      spyDbModel.mockImplementation(() => {
+        return {
+          drop: () => {
+            return;
+          },
+        };
+      });
+      const contentType = await cmsServices.deleteContentType(1);
+      expect(contentType).toEqual({message: 'ContentType deleted successfully'});
+      expect(spyDb).toHaveBeenCalledTimes(1);
+      expect(spyDbModel).toHaveBeenCalledTimes(1);
+      expect(spyDbTablesListFind).toHaveBeenCalledTimes(1);
+    });
+    it('should throw an error if content type does not exist', async () => {
+      const spyDb = jest.spyOn(db.ContentTypes, 'findOne');
+      spyDb.mockResolvedValue(null);
+      await expect(cmsServices.deleteContentType(1)).rejects.toThrow();
+      expect(spyDb).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('getContentTypeFields', () => {
+    it('should get all fields of a content type', async () => {
+      const spyDb = jest.spyOn(db.TablesList, 'findOne');
+      spyDb.mockResolvedValue({tableName: 'Table_1'});
+      const spyDbModel = jest.spyOn(db.sequelize, 'model');
+      spyDbModel.mockImplementation(() => {
+        return {
+          rawAttributes: {
+            test: 'test',
+            test2: 'test2',
+          },
+        };
+      });
+      const contentType = await cmsServices.getContentTypeFields(1);
+      expect(contentType).toEqual(['test', 'test2']);
+      expect(spyDb).toHaveBeenCalledTimes(1);
+      expect(spyDbModel).toHaveBeenCalledTimes(1);
+    });
   });
 });
