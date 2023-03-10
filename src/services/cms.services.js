@@ -80,7 +80,6 @@ const updateContentTypeEntry = async (id, entryId, entry) => {
       id: entryId,
     },
   });
-  console.log(contentTypeEntry, 'contentTypeEntry');
   if (!contentTypeEntry[0]) throw new CustomError(404, 'Entry not found');
   return {message: 'Entry updated successfully'};
 };
