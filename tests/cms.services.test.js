@@ -346,4 +346,67 @@ describe('cms services', () => {
       expect(spyDbModel).toHaveBeenCalledTimes(1);
     });
   });
+  describe('changeContentTypeFieldNames', () => {
+    it('should change the field name of a content type', async () => {
+      const spyDbFindOne = jest.spyOn(db.TablesList, 'findOne');
+      spyDbFindOne.mockResolvedValue({tableName: 'Table_1'});
+      const spyDbModel = jest.spyOn(db.sequelize, 'model');
+      spyDbModel.mockImplementation(() => {
+        return {
+          rawAttributes: {
+            test: 'test',
+            test2: 'test2',
+          },
+        };
+      });
+      const spyDbgetQueryInterface = jest.spyOn(db.sequelize, 'getQueryInterface');
+      spyDbgetQueryInterface.mockImplementation(() => {
+        return {
+          renameColumn: () => {},
+        };
+      });
+      const spyDbSync = jest.spyOn(db.sequelize, 'sync');
+      spyDbSync.mockImplementation(() => {
+        Promise.resolve();
+      });
+      const contentType = await cmsServices.changeContentTypeFieldNames(1, 'test', 'test3');
+      expect(contentType).toEqual({message: 'Field name changed successfully'});
+      expect(spyDbFindOne).toHaveBeenCalledTimes(1);
+      expect(spyDbModel).toHaveBeenCalledTimes(1);
+      expect(spyDbgetQueryInterface).toHaveBeenCalledTimes(1);
+      expect(spyDbSync).toHaveBeenCalledTimes(1);
+    });
+    it('should throw an error if field does not exist', async () => {
+      const spyDbFindOne = jest.spyOn(db.TablesList, 'findOne');
+      spyDbFindOne.mockResolvedValue({tableName: 'Table_1'});
+      const spyDbModel = jest.spyOn(db.sequelize, 'model');
+      spyDbModel.mockImplementation(() => {
+        return {
+          rawAttributes: {
+            test: 'test',
+            test2: 'test2',
+          },
+        };
+      });
+      await expect(cmsServices.changeContentTypeFieldNames(1, 'test3', 'test4')).rejects.toThrow();
+      expect(spyDbFindOne).toHaveBeenCalledTimes(1);
+      expect(spyDbModel).toHaveBeenCalledTimes(1);
+    });
+    it('should throw an error if field name already exists', async () => {
+      const spyDbFindOne = jest.spyOn(db.TablesList, 'findOne');
+      spyDbFindOne.mockResolvedValue({tableName: 'Table_1'});
+      const spyDbModel = jest.spyOn(db.sequelize, 'model');
+      spyDbModel.mockImplementation(() => {
+        return {
+          rawAttributes: {
+            test: 'test',
+            test2: 'test2',
+          },
+        };
+      });
+      await expect(cmsServices.changeContentTypeFieldNames(1, 'test', 'test2')).rejects.toThrow();
+      expect(spyDbFindOne).toHaveBeenCalledTimes(1);
+      expect(spyDbModel).toHaveBeenCalledTimes(1);
+    });
+  });
 });
