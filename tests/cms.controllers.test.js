@@ -234,4 +234,284 @@ describe('cms controllers', () => {
       expect(res.json).toHaveBeenCalledWith({error: 'test'});
     });
   });
+  describe('updateContentType', () => {
+    it('should return 200 and update content type', async () => {
+      const spy = jest.spyOn(cmsServices, 'updateContentType');
+      spy.mockResolvedValueOnce({message: 'ContentType updated successfully'});
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          contentTypeName: 'test',
+          contentTypeFields: ['test'],
+          operation: 'add',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.updateContentType(req, res);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({message: 'ContentType updated successfully'});
+    });
+    it('should return 500 and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'updateContentType');
+      spy.mockRejectedValueOnce(new Error('test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          contentTypeName: 'test',
+          contentTypeFields: ['test'],
+          operation: 'add',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.updateContentType(req, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+    it('should return custom error status code and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'updateContentType');
+      spy.mockRejectedValueOnce(new CustomError(400, 'test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          contentTypeName: 'test',
+          contentTypeFields: ['test'],
+          operation: 'add',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.updateContentType(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+  });
+  describe('deleteContentTypeEntry', () => {
+    it('should return 200 and delete content type entry', async () => {
+      const spy = jest.spyOn(cmsServices, 'deleteContentTypeEntry');
+      spy.mockResolvedValueOnce({message: 'Entry deleted successfully'});
+      const req = {
+        params: {
+          id: 1,
+          entryId: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.deleteContentTypeEntry(req, res);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({message: 'Entry deleted successfully'});
+    });
+    it('should return 500 and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'deleteContentTypeEntry');
+      spy.mockRejectedValueOnce(new Error('test'));
+      const req = {
+        params: {
+          id: 1,
+          entryId: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.deleteContentTypeEntry(req, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+    it('should return custom error status code and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'deleteContentTypeEntry');
+      spy.mockRejectedValueOnce(new CustomError(400, 'test'));
+      const req = {
+        params: {
+          id: 1,
+          entryId: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.deleteContentTypeEntry(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+  });
+  describe('updateContentTypeEntry', () => {
+    it('should return 200 and update content type entry', async () => {
+      const spy = jest.spyOn(cmsServices, 'updateContentTypeEntry');
+      spy.mockResolvedValueOnce({message: 'Entry updated successfully'});
+      const req = {
+        params: {
+          id: 1,
+          entryId: 1,
+        },
+        body: {
+          name: 'test',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.updateContentTypeEntry(req, res);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({message: 'Entry updated successfully'});
+    });
+    it('should return 500 and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'updateContentTypeEntry');
+      spy.mockRejectedValueOnce(new Error('test'));
+      const req = {
+        params: {
+          id: 1,
+          entryId: 1,
+        },
+        body: {
+          name: 'test',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.updateContentTypeEntry(req, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+    it('should return custom error status code and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'updateContentTypeEntry');
+      spy.mockRejectedValueOnce(new CustomError(400, 'test'));
+      const req = {
+        params: {
+          id: 1,
+          entryId: 1,
+        },
+        body: {
+          name: 'test',
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.updateContentTypeEntry(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+  });
+  describe('deleteContentType', () => {
+    it('should return 200 and delete content type', async () => {
+      const spy = jest.spyOn(cmsServices, 'deleteContentType');
+      spy.mockResolvedValueOnce({message: 'ContentType deleted successfully'});
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.deleteContentType(req, res);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({message: 'ContentType deleted successfully'});
+    });
+    it('should return 500 and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'deleteContentType');
+      spy.mockRejectedValueOnce(new Error('test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.deleteContentType(req, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+    it('should return custom error status code and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'deleteContentType');
+      spy.mockRejectedValueOnce(new CustomError(400, 'test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.deleteContentType(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+  });
+  describe('getContentTypeFields', () => {
+    it('should return 200 and get content type fields', async () => {
+      const spy = jest.spyOn(cmsServices, 'getContentTypeFields');
+      spy.mockResolvedValueOnce({fields: ['name', 'email']});
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.getContentTypeFields(req, res);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({fields: ['name', 'email']});
+    });
+    it('should return 500 and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'getContentTypeFields');
+      spy.mockRejectedValueOnce(new Error('test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.getContentTypeFields(req, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+    it('should return custom error status code and error message', async () => {
+      const spy = jest.spyOn(cmsServices, 'getContentTypeFields');
+      spy.mockRejectedValueOnce(new CustomError(400, 'test'));
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await cmsControllers.getContentTypeFields(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({error: 'test'});
+    });
+  });
 });
